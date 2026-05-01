@@ -28,6 +28,7 @@ function init() {
       gameState.plants = data.plants || [];
       gridPlacements = data.gridPlacements || [];
       collection = data.collection || initCollection();
+      window.collection = collection;
       document.getElementById("starter-screen").style.display = "none";
       window.gridPlacements = gridPlacements;
       render();
@@ -38,6 +39,7 @@ function init() {
   }
 
   if (!collection) collection = initCollection();
+  window.collection = collection;
   buildStarterSelection();
   gameState.screen = "starter-select";
 
