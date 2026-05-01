@@ -1,5 +1,6 @@
 // ── Main Game Loop & State Management ──
 
+const starterGenotypes = [5, 2, 3].map(count => createStarterGenotype(count));
 let gridPlacements = [];   // { plantId, col, row }
 
 let gameState = {
@@ -60,7 +61,8 @@ function buildStarterSelection() {
     miniCanvas.height = 120;
     card.appendChild(miniCanvas);
 
-    const starterGenotype = createStarterGenotype([5, 2, 3][i]);
+    card.dataset.index = i;
+    const starterGenotype = starterGenotypes[i];
     const starterPhenotype = computePhenotype(starterGenotype);
 
     // Preview on canvas
@@ -75,21 +77,22 @@ function buildStarterSelection() {
       "A mysterious plant thriving in cool tones and narrow leaves",
       "A gentle soul with delicate daisy buds and smooth stems"][i];
 
-    card.addEventListener("click", (e) => {
-      console.log("[DEBUG] CARD CLICKED on", e.target.className);
-      try { selectStarter(i, starterGenotype); console.log("[DEBUG] selectStarter completed"); }
-      catch(err) { console.error("[DEBUG] selectStarter FAILED:", err); }
-    });
-
     card.appendChild(h3);
     card.appendChild(p);
     container.appendChild(card);
   }
+
+  // Use event delegation on the container for more reliable click handling
+  container.addEventListener("click", (e) => {
+    const card = e.target.closest(".starter-card");
+    if (!card) return;
+    console.log("[DEBUG] Card clicked via delegation, target:", e.target.className);
+    try { selectStarter(parseInt(card.dataset.index), starterGenotypes[parseInt(card.dataset.index)]); }
+    catch(err) { console.error("[DEBUG] selectStarter FAILED:", err); }
+  });
 }
 
 function selectStarter(index, genotype) {
-  console.log("[DEBUG] selectStarter called with index=", index);
-  try {
   gameState.plants = gameState.plants || [];
   gridPlacements = gridPlacements || [];
 
@@ -113,8 +116,7 @@ function selectStarter(index, genotype) {
   updateStats();
   saveGame();
 
-  } catch(err) { console.error("[DEBUG] selectStarter error:", err); }
-    showToast(`Welcome to your garden! ${plant.name} is waiting. 💚`);
+  showToast(`Welcome to your garden! ${plant.name} is waiting. 💚`);
 }
 
 // ── Game Loop ──
