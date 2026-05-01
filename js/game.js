@@ -75,7 +75,11 @@ function buildStarterSelection() {
       "A mysterious plant thriving in cool tones and narrow leaves",
       "A gentle soul with delicate daisy buds and smooth stems"][i];
 
-    card.addEventListener("click", () => selectStarter(i, starterGenotype));
+    card.addEventListener("click", (e) => {
+      console.log("[DEBUG] CARD CLICKED on", e.target.className);
+      try { selectStarter(i, starterGenotype); console.log("[DEBUG] selectStarter completed"); }
+      catch(err) { console.error("[DEBUG] selectStarter FAILED:", err); }
+    });
 
     card.appendChild(h3);
     card.appendChild(p);
@@ -84,6 +88,8 @@ function buildStarterSelection() {
 }
 
 function selectStarter(index, genotype) {
+  console.log("[DEBUG] selectStarter called with index=", index);
+  try {
   gameState.plants = gameState.plants || [];
   gridPlacements = gridPlacements || [];
 
@@ -107,7 +113,8 @@ function selectStarter(index, genotype) {
   updateStats();
   saveGame();
 
-  showToast(`Welcome to your garden! ${plant.name} is waiting. 💚`);
+  } catch(err) { console.error("[DEBUG] selectStarter error:", err); }
+    showToast(`Welcome to your garden! ${plant.name} is waiting. 💚`);
 }
 
 // ── Game Loop ──
