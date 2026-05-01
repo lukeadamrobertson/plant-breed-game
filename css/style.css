@@ -1,0 +1,330 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: #2d4a22;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#game-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+canvas {
+  display: block;
+}
+
+/* ── Toolbar ── */
+#toolbar {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  background: rgba(80, 50, 20, 0.92);
+  border: 3px solid #8B6914;
+  border-radius: 14px;
+  padding: 6px 10px;
+  z-index: 10;
+}
+
+.tool-btn {
+  width: 52px;
+  height: 52px;
+  border: 2px solid #6b5310;
+  border-radius: 10px;
+  background: rgba(60, 40, 10, 0.8);
+  color: #f0e6c0;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+}
+
+.tool-btn:hover {
+  background: rgba(90, 60, 20, 0.9);
+  transform: scale(1.08);
+}
+
+.tool-btn.active {
+  border-color: #ffd700;
+  background: rgba(120, 80, 20, 0.95);
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+}
+
+.tool-btn .tool-label {
+  font-size: 10px;
+  display: block;
+  text-align: center;
+  line-height: 1;
+}
+
+/* ── Starter Selection Screen ── */
+#starter-screen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #87ceeb 0%, #90c77a 50%, #6b8f4a 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+#starter-screen h1 {
+  font-size: 36px;
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+  margin-bottom: 8px;
+}
+
+#starter-screen .subtitle {
+  font-size: 16px;
+  color: #f0ead6;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  margin-bottom: 30px;
+}
+
+.starter-cards {
+  display: flex;
+  gap: 24px;
+}
+
+.starter-card {
+  width: 220px;
+  background: rgba(255,255,255,0.9);
+  border: 3px solid #8B6914;
+  border-radius: 16px;
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.starter-card:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+.starter-card canvas {
+  width: 160px;
+  height: 120px;
+  margin: 0 auto 8px;
+  display: block;
+}
+
+.starter-card h3 {
+  color: #4a3520;
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.starter-card p {
+  color: #7a6a50;
+  font-size: 12px;
+}
+
+/* ── Collection Panel ── */
+#collection-panel {
+  position: absolute;
+  top: 0;
+  right: -360px;
+  width: 340px;
+  height: 100vh;
+  background: rgba(245, 235, 210, 0.97);
+  border-left: 3px solid #8B6914;
+  z-index: 50;
+  transition: right 0.3s ease;
+  overflow-y: auto;
+  padding: 60px 16px 20px;
+}
+
+#collection-panel.open {
+  right: 0;
+}
+
+#collection-panel h2 {
+  color: #4a3520;
+  font-size: 22px;
+  margin-bottom: 12px;
+}
+
+.collection-entry {
+  background: rgba(255,255,255,0.7);
+  border: 2px solid #c4a96a;
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.collection-entry.locked {
+  opacity: 0.4;
+  border-color: #aaa;
+}
+
+.collection-entry .mini-plant {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+}
+
+.collection-entry .info {
+  flex: 1;
+}
+
+.collection-entry .info h4 {
+  color: #4a3520;
+  font-size: 13px;
+}
+
+.collection-entry .info p {
+  color: #7a6a50;
+  font-size: 11px;
+}
+
+/* ── Plant Info Popup ── */
+#plant-popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  background: rgba(245, 235, 210, 0.96);
+  backdrop-filter: blur(8px);
+  border: 3px solid #8B6914;
+  border-radius: 16px;
+  padding: 20px 24px;
+  min-width: 320px;
+  z-index: 60;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+#plant-popup.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+#plant-popup h3 {
+  color: #4a3520;
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+#plant-popup .trait-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px 0;
+  color: #5a4a30;
+  font-size: 13px;
+}
+
+#plant-popup .close-btn {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #7a6a50;
+}
+
+#plant-popup .close-btn:hover {
+  color: #3a2a10;
+}
+
+/* ── Toast Notifications ── */
+#toast-container {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 80;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.toast {
+  background: rgba(80, 50, 20, 0.95);
+  color: #f0ead6;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 2px solid #8B6914;
+  font-size: 14px;
+  animation: toastIn 0.3s ease, toastOut 0.5s ease 2.5s forwards;
+  text-align: center;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes toastOut {
+  from { opacity: 1; }
+  to { opacity: 0; transform: translateY(-10px); }
+}
+
+/* ── Collection Toggle Button ── */
+#collection-toggle {
+  position: absolute;
+  top: 74px;
+  right: 12px;
+  z-index: 15;
+  width: 48px;
+  height: 48px;
+  border: 2px solid #6b5310;
+  border-radius: 10px;
+  background: rgba(80, 50, 20, 0.92);
+  color: #f0e6c0;
+  font-size: 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#collection-toggle:hover {
+  background: rgba(110, 70, 30, 0.95);
+}
+
+/* ── Overlay dimmer ── */
+#overlay-dimmer {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 55;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+#overlay-dimmer.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ── Stats display ── */
+#stats-display {
+  position: absolute;
+  top: 14px;
+  left: 12px;
+  color: #f0ead6;
+  font-size: 13px;
+  z-index: 15;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}

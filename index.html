@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cozy Garden</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="game-container">
+    <canvas id="game-canvas"></canvas>
+
+    <!-- Toolbar -->
+    <div id="toolbar">
+      <button class="tool-btn" data-tool="breed" title="Breed (drag plant onto another)">🌱</button>
+      <button class="tool-btn" data-tool="water" title="Water a plant">💧</button>
+      <button class="tool-btn" data-tool="fertilizer" title="Fertilize a plant">⚡</button>
+      <button class="tool-btn" data-tool="scissors" title="Clone (drag onto empty slot)">✂️</button>
+      <button class="tool-btn" data-tool="info" title="View plant info">ℹ️</button>
+    </div>
+
+    <!-- Stats -->
+    <div id="stats-display"></div>
+
+    <!-- Collection Toggle -->
+    <button id="collection-toggle" title="Collection Book">📖</button>
+
+    <!-- Starter Selection Screen -->
+    <div id="starter-screen">
+      <h1>Cozy Garden</h1>
+      <p class="subtitle">Choose your first companion to grow with</p>
+      <div class="starter-cards" id="starter-cards"></div>
+    </div>
+
+    <!-- Collection Panel -->
+    <div id="collection-panel">
+      <h2>Garden Book</h2>
+      <div id="collection-list"></div>
+    </div>
+
+    <!-- Overlay Dimmer -->
+    <div id="overlay-dimmer"></div>
+
+    <!-- Plant Info Popup -->
+    <div id="plant-popup">
+      <button class="close-btn" id="popup-close">&times;</button>
+      <h3 id="popup-title"></h3>
+      <div id="popup-content"></div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container"></div>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/genetics.js"></script>
+  <script src="js/plants.js"></script>
+  <script src="js/collection.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/rendering.js"></script>
+  <script src="js/input.js"></script>
+</body>
+</html>
