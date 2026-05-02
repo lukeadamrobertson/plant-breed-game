@@ -6,7 +6,15 @@ const AGE_THRESHOLDS = { sprout: 0, young: 10, mature: 25, elderly: 40, dead: 55
 function createPlant(genotype, parentA, parentB) {
   const phenotype = computePhenotype(genotype);
   const maxLifespan = computeMaxLifespan({ genotype });
-  const generation = Math.max(parentA.generation, parentB.generation) + 1;
+  
+  // Handle starter plants with no parents
+  const generation = (parentA && parentB) 
+    ? Math.max(parentA.generation, parentB.generation) + 1 
+    : 1;
+  
+  const parentIds = (parentA && parentB) 
+    ? [parentA.id, parentB.id] 
+    : [];
 
   return {
     id: uuid(),
@@ -20,7 +28,7 @@ function createPlant(genotype, parentA, parentB) {
     maxLifespan,
     waterLevel: 1.0,
     fertilizerBoost: 0,
-    parentIds: [parentA.id, parentB.id],
+    parentIds,
     historyBredWith: []
   };
 }

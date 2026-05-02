@@ -110,7 +110,6 @@ function selectStarter(index, genotype) {
 
   const plant = createPlant(genotype, null, null);
   plant.name = ["Sunny", "Shadow", "Misty"][index];
-  plant.parentIds = [];
   plant.maxLifespan = computeMaxLifespan({ genotype });
 
   gameState.plants.push(plant);
