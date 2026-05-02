@@ -46,6 +46,11 @@ function init() {
 
   // Set up all input handlers (runs regardless of new/save)
   initInput();
+  
+  // Start game loop if not already started
+  if (!gameState.lastTime) {
+    gameLoop(0);
+  }
 }
 
 function buildStarterSelection() {
