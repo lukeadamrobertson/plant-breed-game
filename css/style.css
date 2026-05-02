@@ -68,7 +68,7 @@ canvas {
 
 /* ── Starter Selection Screen ── */
 #starter-screen {
-  position: absolute;
+  position: fixed;
   inset: 0;
   background: linear-gradient(180deg, #87ceeb 0%, #90c77a 50%, #6b8f4a 100%);
   display: flex;
@@ -76,6 +76,7 @@ canvas {
   align-items: center;
   justify-content: center;
   z-index: 100;
+  pointer-events: auto;
 }
 
 #starter-screen h1 {

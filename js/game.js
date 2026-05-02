@@ -79,16 +79,23 @@ function buildStarterSelection() {
 
     card.appendChild(h3);
     card.appendChild(p);
+
+    // Add click handler to each card for reliable event capture
+    card.addEventListener("click", (e) => {
+      e.stopPropagation();
+      console.log("[DEBUG] Card direct click, index:", i);
+      selectStarter(i, starterGenotypes[i]);
+    });
+
     container.appendChild(card);
   }
 
-  // Use event delegation on the container for more reliable click handling
+  // Also handle clicks on the container as fallback
   container.addEventListener("click", (e) => {
     const card = e.target.closest(".starter-card");
     if (!card) return;
-    console.log("[DEBUG] Card clicked via delegation, target:", e.target.className);
-    try { selectStarter(parseInt(card.dataset.index), starterGenotypes[parseInt(card.dataset.index)]); }
-    catch(err) { console.error("[DEBUG] selectStarter FAILED:", err); }
+    console.log("[DEBUG] Card clicked via delegation, index:", card.dataset.index);
+    selectStarter(parseInt(card.dataset.index), starterGenotypes[parseInt(card.dataset.index)]);
   });
 }
 
